@@ -48,11 +48,15 @@ func (v VectorFH) Free() os.Error {
 
 // allocates a vector of host pinned memory.  Must be Free()d
 func MallocVecFH(length int) (VectorFH,os.Error) {
+	// indirect pointer we'll copy alloc'd address to
         var ptrptr *unsafe.Pointer = new(unsafe.Pointer)
 	var err = CudaErr(C.cuMemAllocHost(ptrptr,_Ctypedef_size_t(length)))
+	// dereference - this is our memory now
 	var ptr = (*ptrptr)
+	// wrap in Slice
 	var h = reflect.SliceHeader{uintptr(ptr), length, length}
         var Slice []float =unsafe.Unreflect(floatSliceType, unsafe.Pointer(&h)).([]float)
+	
 	return VectorFH { ptr, Slice, length }, err
 }
 
