@@ -11,11 +11,21 @@ func checkErr(err os.Error) {
 func main() {
 	cublas.Init()
 	var length int = 5
-
+	// set up memory
 	h_x, err := cublas.MallocVecFH(length)
 	checkErr(err)
+	defer h_x.Free()
 	h_y, err := cublas.MallocVecFH(length)
 	checkErr(err)
+	defer h_y.Free()
+	d_x,err := cublas.MallocDevicePointerVF(length)
+	checkErr(err)
+	defer d_x.Free()
+	d_y,err := cublas.MallocDevicePointerVF(length)
+	checkErr(err)
+	defer d_y.Free()
+
+
 	var i int
 	for i = 0 ; i < length ; i++ {
 		h_x.Slice[i] = float(i+1)
@@ -23,10 +33,6 @@ func main() {
 	}
 	fmt.Println("x: ", h_x.Slice)
 	fmt.Println("y: ", h_y.Slice)
-	d_x,err := cublas.MallocDevicePointerVF(length)
-	checkErr(err)
-	d_y,err := cublas.MallocDevicePointerVF(length)
-	checkErr(err)
 	err = d_x.CopyFrom(h_x)
 	checkErr(err)
 	err = d_y.CopyFrom(h_y)
@@ -46,8 +52,4 @@ func main() {
 	d_y.CopyTo(h_y)
 	fmt.Println("y: ", h_y.Slice)
 
-	h_x.Free()
-	d_x.Free()
-	h_y.Free()
-	d_y.Free()
 }
