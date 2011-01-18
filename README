@@ -1,0 +1,6 @@
+Work in progress.
+
+Implemented 3 level 1 single-precision BLAS routines so far, and more importantly, memory management functions.  Shouldn't be too bad to implement the rest.
+
+See:
+http://developer.download.nvidia.com/compute/cuda/3_2_prod/toolkit/docs/CUBLAS_Library.pdf
