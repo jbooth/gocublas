@@ -5,7 +5,7 @@ import "C"
 import "os"
 
 func floatPtr(d DevicePointer) *_Ctype_float {
-	return ((*_Ctype_float)(d.data()))
+	return ((*_Ctype_float)(d.ptr))
 }
 // BLAS 1 operations, vector-vector and vector-scalar
 
